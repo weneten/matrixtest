@@ -7,7 +7,7 @@ app.secret_key = 'supersecretkey'  # Für Flash-Messages
 
 # Basis-URL des Matrix-Servers
 base_url = 'https://matrix.org'
-access_token = os.environ['ACCESS_TOKEN']  # Zugriffstoken aus Umgebungsvariablen
+access_token = os.environ.get('ACCESS_TOKEN')  # Zugriffstoken aus Umgebungsvariablen
 max_file_size = 100 * 1024 * 1024  # 100 MB
 
 def upload_file(file_data, access_token, filename=None):
@@ -49,16 +49,25 @@ def index():
             filename = uploaded_file.filename
             if filename:
                 file_path = os.path.join('uploads', filename)
-                uploaded_file.save(file_path)
+                try:
+                    uploaded_file.save(file_path)
+                except Exception as e:
+                    flash(f'Fehler beim Speichern der Datei: {e}')
+                    return redirect(url_for('index'))
 
-                with open(file_path, 'rb') as file:
-                    media_uri = upload_file(file.read(), access_token, filename)
-                    if media_uri:
-                        return render_template('result.html', media_uris=[media_uri])
-                    else:
-                        flash('Es gab ein Problem beim Hochladen der Datei. Bitte versuche es erneut.')
-
-                os.remove(file_path)  # Optional: Entferne die Datei nach dem Upload
+                try:
+                    with open(file_path, 'rb') as file:
+                        media_uri = upload_file(file.read(), access_token, filename)
+                        if media_uri:
+                            os.remove(file_path)  # Optional: Entferne die Datei nach dem Upload
+                            return render_template('result.html', media_uris=[media_uri])
+                        else:
+                            flash('Es gab ein Problem beim Hochladen der Datei. Bitte versuche es erneut.')
+                except Exception as e:
+                    flash(f'Fehler beim Hochladen der Datei: {e}')
+                finally:
+                    if os.path.exists(file_path):
+                        os.remove(file_path)  # Sicherstellen, dass die Datei gelöscht wird
             else:
                 flash('Ungültiger Dateiname. Bitte wähle eine andere Datei.')
         else:
@@ -68,4 +77,4 @@ def index():
 
 if __name__ == '__main__':
     os.makedirs('uploads', exist_ok=True)
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
