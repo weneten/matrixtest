@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Ergebnisse</title>
+</head>
+<body>
+    <h1>Hochgeladene Medien-IDs:</h1>
+    <ul>
+        {% for media_uri in media_uris %}
+        <li>{{ media_uri }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Eine andere Datei hochladen</a>
+</body>
+</html>
