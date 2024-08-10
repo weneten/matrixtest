@@ -7,17 +7,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Upload-Ergebnisse</h1>
-    <p>Die Datei wurde erfolgreich hochgeladen. Hier sind die URIs der hochgeladenen Chunks:</p>
-    <ul>
-        {% for uri in media_uris %}
-            <li>
-                <a href="https://matrix-client.matrix.org/_matrix/media/v3/download/matrix.org/{{ uri.split('/')[-1] }}" target="_blank">
-                    {{ uri.split('/')[-1] }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('index') }}">Zurück zur Startseite</a>
+    <div class="container">
+        <h1>Upload-Ergebnisse</h1>
+        <p>Die Datei wurde erfolgreich hochgeladen. Hier sind die URIs der hochgeladenen Chunks:</p>
+        <ul>
+            {% for uri in media_uris %}
+                <li>
+                    <a href="https://matrix-client.matrix.org/_matrix/media/v3/download/matrix.org/{{ uri.split('/')[-1] }}" target="_blank">
+                        {{ uri.split('/')[-1] }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('index') }}">Zurück zur Startseite</a>
+    </div>
 </body>
 </html>
