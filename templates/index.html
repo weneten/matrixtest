@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datei-Upload</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/validate.js') }}" defer></script>
 </head>
 <body>
     <div class="container centered">
         <div class="upload-form">
-            <h1>Datei-Upload</h1>
-            <form action="/" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" required>
+            <h1>Datei hochladen</h1>
+            <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput" />
                 <button type="submit">Hochladen</button>
             </form>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div>
-                    {% for category, message in messages %}
-                        <p class="{{ category }}">{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             {% endwith %}
         </div>
     </div>
