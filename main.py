@@ -54,38 +54,22 @@ def split_and_upload(file_path, access_token):
 
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         uploaded_file = request.files['file']
         if uploaded_file and uploaded_file.filename != '':
-            file_size = len(uploaded_file.read())
-            uploaded_file.seek(0)  # Zurück zum Anfang der Datei
-            if file_size > max_file_size:
-                flash(f'Die Datei ist zu groß. Bitte wähle eine Datei, die kleiner als {max_file_size / 1024 / 1024} MB ist.')
-                return redirect(url_for('index'))
-            
             filename = uploaded_file.filename
             if filename:
-                file_path = os.path.join(UPLOAD_FOLDER, filename)
-                try:
-                    uploaded_file.save(file_path)
-                except Exception as e:
-                    flash(f'Fehler beim Speichern der Datei: {e}')
-                    return redirect(url_for('index'))
-
-                try:
-                    with open(file_path, 'rb') as file:
-                        media_uri = upload_file(file.read(), access_token, filename)
-                        if media_uri:
-                            os.remove(file_path)  # Optional: Entferne die Datei nach dem Upload
-                            return render_template('result.html', media_uris=[media_uri])
-                        else:
-                            flash('Es gab ein Problem beim Hochladen der Datei. Bitte versuche es erneut.')
-                except Exception as e:
-                    flash(f'Fehler beim Hochladen der Datei: {e}')
-                finally:
-                    if os.path.exists(file_path):
-                        os.remove(file_path)  # Sicherstellen, dass die Datei gelöscht wird
+                file_path = os.path.join('uploads', filename)
+                uploaded_file.save(file_path)
+                media_uris = split_and_upload(file_path, access_token)
+                if media_uris:
+                    # Nur die Media-ID aus der URI extrahieren
+                    media_links = [f"https://matrix-client.matrix.org/_matrix/media/v3/download/matrix.org/{uri.split('/')[-1]}" for uri in media_uris]
+                    return render_template('result.html', filenames=[filename], media_links=media_links)
+                else:
+                    flash('Es gab ein Problem beim Hochladen der Datei. Bitte versuche es erneut.')
             else:
                 flash('Ungültiger Dateiname. Bitte wähle eine andere Datei.')
         else:
