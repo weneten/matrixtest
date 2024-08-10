@@ -13,13 +13,15 @@ max_file_size = 100 * 1024 * 1024  # 100 MB
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Stelle sicher, dass der Upload-Ordner existiert
 
-def upload_file(file_data, access_token, filename=None):
+def upload_file(file_data, filename, access_token):
     headers = {
         'Authorization': f'Bearer {access_token}',
         'Content-Type': 'application/octet-stream'
     }
+
     if filename:
         headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+
     try:
         response = requests.post(f'{base_url}/_matrix/media/v3/upload', headers=headers, data=file_data)
         response.raise_for_status()
@@ -37,6 +39,19 @@ def upload_file(file_data, access_token, filename=None):
     except Exception as err:
         print(f"An error occurred: {err}")
         return None
+
+def split_and_upload(file_path, access_token):
+    media_uris = []
+    filename = os.path.basename(file_path)
+    
+    with open(file_path, 'rb') as file:
+        file_data = file.read()
+        content_uri = upload_file(file_data, filename, access_token)
+        if content_uri:
+            media_uris.append(content_uri)
+
+    return media_uris
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
