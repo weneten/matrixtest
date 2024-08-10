@@ -1,59 +1,59 @@
+/* styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background-color: #f4f4f9;
     color: #333;
     margin: 0;
     padding: 0;
-}
-
-.container {
-    width: 80%;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.centered {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
 
-.upload-form {
-    background: #fff;
-    padding: 20px;
+.container {
+    background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
 h1 {
-    color: #6a1b9a; /* Abgedunkeltes Lila */
+    color: #5e35b1; /* Lila Akzentfarbe */
+    margin-bottom: 20px;
 }
 
-button {
-    background-color: #6a1b9a; /* Abgedunkeltes Lila */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
+.result-content {
+    margin-bottom: 20px;
 }
 
-button:hover {
-    background-color: #5c2a91; /* Etwas dunkleres Lila */
+.download-link {
+    color: #5e35b1; /* Lila Akzentfarbe */
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.2em;
 }
 
-.flash-messages {
-    background-color: #ffdddd;
-    color: #d8000c;
-    border: 1px solid #d8000c;
-    padding: 10px;
-    margin-top: 20px;
-    border-radius: 4px;
+.download-link:hover {
+    text-decoration: underline;
 }
 
-.flash-messages p {
-    margin: 0;
+.back-link {
+    color: #5e35b1; /* Lila Akzentfarbe */
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.back-link:hover {
+    text-decoration: underline;
 }
