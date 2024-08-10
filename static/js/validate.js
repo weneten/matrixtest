@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
-    const MAX_FILE_SIZE = 100 * 1000 * 1000; // 100 MB
+    const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 
     form.addEventListener('submit', function (event) {
         const file = fileInput.files[0];
