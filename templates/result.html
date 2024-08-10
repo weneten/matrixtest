@@ -10,11 +10,9 @@
     <div class="container centered">
         <h1>Upload-Ergebnisse</h1>
         <ul>
-            {% for filename, media_link in zip(filenames, media_links) %}
-                <li>
-                    <a href="{{ media_link }}" target="_blank">{{ filename }}</a>
-                </li>
-            {% endfor %}
+            <li>
+                <a href="{{ media_link }}" target="_blank">{{ filename }}</a>
+            </li>
         </ul>
         <a href="{{ url_for('index') }}">Zurück zur Startseite</a>
     </div>
