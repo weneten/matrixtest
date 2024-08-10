@@ -51,29 +51,34 @@ def upload_file(file_data, filename, access_token):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        uploaded_file = request.files.get('file')
-        if uploaded_file and uploaded_file.filename:
+        uploaded_file = request.files['file']
+        if uploaded_file and uploaded_file.filename != '':
             filename = uploaded_file.filename
             file_path = os.path.join(UPLOAD_FOLDER, filename)
-            
             try:
                 # Versuche, die Datei zu speichern
                 uploaded_file.save(file_path)
                 
                 # Prüfe die Datei auf Größe
-                if os.path.getsize(file_path) > max_file_size:  # 100 MB
+                if os.path.getsize(file_path) > max_file_size:
                     os.remove(file_path)
                     flash('Die Datei ist zu groß. Maximal erlaubte Größe ist 100 MB.')
                     return redirect(url_for('index'))
+
+                # Lade die Datei hoch
+                media_uris = split_and_upload(file_path, access_token)
                 
-                # Lese die Datei und lade sie hoch
-                with open(file_path, 'rb') as file:
-                    file_data = file.read()
-                    media_uri = upload_file(file_data, filename, access_token)
+                # Bereite die Daten für das Template vor
+                filenames = [filename] * len(media_uris)
                 
-                if media_uri:
-                    media_link = f'https://matrix-client.matrix.org/_matrix/media/v3/download/matrix.org/{media_uri.split("/")[-1]}'
-                    return render_template('result.html', filename=filename, media_link=media_link)
+                # Füge den Dateinamen am Ende des Links hinzu
+                media_links = [
+                    f'https://matrix-client.matrix.org/_matrix/media/v3/download/matrix.org/{uri.split("/")[-1]}/{filename}?allow_redirect=true'
+                    for uri in media_uris
+                ]
+                
+                if media_uris:
+                    return render_template('result.html', filenames=filenames, media_links=media_links)
                 else:
                     flash('Es gab ein Problem beim Hochladen der Datei. Bitte versuche es erneut.')
             except Exception as e:
@@ -83,6 +88,7 @@ def index():
             flash('Es wurde keine Datei ausgewählt.')
         return redirect(url_for('index'))
     return render_template('index.html')
+
     
 
 if __name__ == '__main__':
