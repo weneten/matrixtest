@@ -9,12 +9,11 @@
 <body>
     <div class="container centered">
         <h1>Upload-Ergebnisse</h1>
-        <ul>
-            <li>
-                <a href="{{ media_link }}" target="_blank">{{ filename }}</a>
-            </li>
-        </ul>
-        <a href="{{ url_for('index') }}">Zurück zur Startseite</a>
+        <div class="result-content">
+            <p>Die Datei wurde erfolgreich hochgeladen. Du kannst sie jetzt herunterladen:</p>
+            <a href="{{ media_link }}" class="download-link" target="_blank">{{ filename }}</a>
+        </div>
+        <a href="{{ url_for('index') }}" class="back-link">Zurück zur Startseite</a>
     </div>
 </body>
 </html>
