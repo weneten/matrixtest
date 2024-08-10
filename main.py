@@ -11,15 +11,7 @@ access_token = os.environ.get('ACCESS_TOKEN')  # Zugriffstoken aus Umgebungsvari
 max_file_size = 100 * 1024 * 1024  # 100 MB
 
 UPLOAD_FOLDER = 'uploads'
-
-# Verzeichnis erstellen, falls es nicht existiert
-if not os.path.exists(UPLOAD_FOLDER):
-    try:
-        os.makedirs(UPLOAD_FOLDER)
-        print(f"Ordner '{UPLOAD_FOLDER}' erfolgreich erstellt.")
-    except Exception as e:
-        print(f"Fehler beim Erstellen des Ordners '{UPLOAD_FOLDER}': {e}")
-        raise
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Stelle sicher, dass der Upload-Ordner existiert
 
 def upload_file(file_data, filename, access_token):
     headers = {
@@ -66,21 +58,18 @@ def index():
                     return redirect(url_for('index'))
 
                 # Lade die Datei hoch
-                media_uris = split_and_upload(file_path, access_token)
+                with open(file_path, 'rb') as file:
+                    file_data = file.read()
+                    content_uri = upload_file(file_data, filename, access_token)
+                    if content_uri:
+                        media_link = f'https://matrix-client.matrix.org/_matrix/media/v3/download/matrix.org/{content_uri.split("/")[-1]}'
+                        return render_template('result.html', filename=filename, media_link=media_link)
+                    else:
+                        flash('Es gab ein Problem beim Hochladen der Datei. Bitte versuche es erneut.')
                 
-                # Bereite die Daten für das Template vor
-                filenames = [filename] * len(media_uris)
+                # Lösche die Datei nach dem Hochladen
+                os.remove(file_path)
                 
-                # Füge den Dateinamen am Ende des Links hinzu
-                media_links = [
-                    f'https://matrix-client.matrix.org/_matrix/media/v3/download/matrix.org/{uri.split("/")[-1]}/{filename}?allow_redirect=true'
-                    for uri in media_uris
-                ]
-                
-                if media_uris:
-                    return render_template('result.html', filenames=filenames, media_links=media_links)
-                else:
-                    flash('Es gab ein Problem beim Hochladen der Datei. Bitte versuche es erneut.')
             except Exception as e:
                 print(f'Fehler beim Speichern der Datei: {e}')
                 flash('Es gab ein Problem beim Speichern der Datei. Bitte versuche es erneut.')
@@ -88,8 +77,6 @@ def index():
             flash('Es wurde keine Datei ausgewählt.')
         return redirect(url_for('index'))
     return render_template('index.html')
-
-    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
