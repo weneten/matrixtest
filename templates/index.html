@@ -20,9 +20,10 @@
                 const start = i * chunkSize;
                 const end = Math.min(start + chunkSize, file.size);
                 const chunk = file.slice(start, end);
+                const chunkBlob = new Blob([chunk]);
 
                 const formData = new FormData();
-                formData.append('chunk', chunk);
+                formData.append('chunk', chunkBlob);
                 formData.append('chunkIndex', i);
                 formData.append('totalChunks', totalChunks);
 
@@ -41,7 +42,7 @@
                         throw new Error(result.message);
                     }
 
-                    console.log(`Chunk ${i + 1}/${totalChunks} uploaded successfully.`);
+                    console.log(`Chunk ${i + 1}/${totalChunks} uploaded and deleted successfully.`);
                 } catch (error) {
                     console.error('Upload failed:', error);
                     alert('Upload failed.');
