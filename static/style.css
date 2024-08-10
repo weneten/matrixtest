@@ -1,81 +1,39 @@
-/* Grundlegendes Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Body-Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+h1, h2, h3 {
+    color: #6a0dad;
+}
+
+.centered {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     text-align: center;
-    padding: 20px;
 }
 
-/* Container-Stile */
-.container {
-    max-width: 800px;
-    width: 100%;
+.upload-form {
     background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
-/* Header-Stile */
-h1 {
-    color: #6a1b9a; /* Abgeblasst Lila */
-    margin-bottom: 20px;
+.error {
+    color: #ff0000;
 }
 
-/* Formular-Stile */
-form {
-    margin: 0 auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Formular-Elemente */
-input[type="file"] {
-    margin-bottom: 10px;
-}
-
-button {
-    background-color: #6a1b9a; /* Abgeblasst Lila */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #4a0072; /* Dunkleres Lila */
-}
-
-/* Nachrichten-Styles */
-ul {
-    list-style-type: none;
-}
-
-li {
-    margin: 5px 0;
-}
-
-a {
-    color: #6a1b9a; /* Abgeblasst Lila */
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
+.success {
+    color: #008000;
 }
