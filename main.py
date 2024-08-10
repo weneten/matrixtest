@@ -11,7 +11,15 @@ access_token = os.environ.get('ACCESS_TOKEN')  # Zugriffstoken aus Umgebungsvari
 max_file_size = 100 * 1024 * 1024  # 100 MB
 
 UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Stelle sicher, dass der Upload-Ordner existiert
+
+# Verzeichnis erstellen, falls es nicht existiert
+if not os.path.exists(UPLOAD_FOLDER):
+    try:
+        os.makedirs(UPLOAD_FOLDER)
+        print(f"Ordner '{UPLOAD_FOLDER}' erfolgreich erstellt.")
+    except Exception as e:
+        print(f"Fehler beim Erstellen des Ordners '{UPLOAD_FOLDER}': {e}")
+        raise
 
 def upload_file(file_data, filename, access_token):
     headers = {
