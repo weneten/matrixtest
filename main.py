@@ -10,6 +10,9 @@ base_url = 'https://matrix.org'
 access_token = os.environ.get('ACCESS_TOKEN')  # Zugriffstoken aus Umgebungsvariablen
 max_file_size = 100 * 1024 * 1024  # 100 MB
 
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Stelle sicher, dass der Upload-Ordner existiert
+
 def upload_file(file_data, access_token, filename=None):
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -48,7 +51,7 @@ def index():
             
             filename = uploaded_file.filename
             if filename:
-                file_path = os.path.join('uploads', filename)
+                file_path = os.path.join(UPLOAD_FOLDER, filename)
                 try:
                     uploaded_file.save(file_path)
                 except Exception as e:
@@ -76,5 +79,4 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    os.makedirs('uploads', exist_ok=True)
     app.run(host='0.0.0.0', port=5000, debug=True)
